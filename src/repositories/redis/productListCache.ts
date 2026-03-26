@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import type { PaginatedResult } from "../../ports/IProductRepository";
+import type { PaginatedResult } from "../../libs/pagination";
 import type { IProductListCache } from "../../ports/IProductListCache";
 import type { Product } from "../../entities/Product";
 

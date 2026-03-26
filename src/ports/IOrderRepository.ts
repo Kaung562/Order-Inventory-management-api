@@ -1,13 +1,9 @@
 import type { Order, OrderLineInput } from "../entities/Order";
+import type { PaginatedResult, PaginationParams } from "../libs/pagination";
 
 export interface IOrderRepository {
   findById(id: number): Promise<Order | null>;
-  list(params: { page: number; pageSize: number }): Promise<{
-    items: Order[];
-    total: number;
-    page: number;
-    pageSize: number;
-  }>;
+  list(params: PaginationParams): Promise<PaginatedResult<Order>>;
   createOrderWithItems(lines: OrderLineInput[]): Promise<Order>;
   cancelOrder(id: number): Promise<Order | null>;
 }

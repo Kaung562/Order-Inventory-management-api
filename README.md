@@ -76,7 +76,8 @@ Default prefix **`/api`** (`API_PREFIX=api`). If `API_PREFIX` is empty, routes a
 - `GET /api/products?page=&pageSize=`
 - `GET /api/products/:id`
 - `POST /api/products` — `{ name, description?, price (dollars), stock }`
-- `PATCH /api/products/:id` — partial; at least one field
+- `PATCH /api/products/:id` — partial update: **`name`**, **`description`**, **`price`** (dollars), and/or **`stock`**; at least one field required
+- `PATCH /api/products/:id/stock` — body `{ "stock": number }` only (inventory-focused endpoint; equivalent to a general PATCH with only `stock`)
 - `DELETE /api/products/:id` — **409** if referenced by order lines
 
 ### Orders

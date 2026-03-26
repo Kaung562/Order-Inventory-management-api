@@ -3,6 +3,7 @@ import { APIPrefix } from "./apiPrefix";
 export function buildOpenApiSpec(): object {
   const { products: p, orders: o } = APIPrefix;
   const productId = `${p}/{id}`;
+  const productStockPath = `${p}/{id}/stock`;
   const orderId = `${o}/{id}`;
   const orderCancel = `${o}/{id}/cancel`;
 
@@ -56,11 +57,19 @@ export function buildOpenApiSpec(): object {
         },
         UpdateProductBody: {
           type: "object",
+          description: "At least one of: name, description, price, stock",
           minProperties: 1,
           properties: {
             name: { type: "string", maxLength: 255 },
             description: { type: "string", maxLength: 10000, nullable: true },
-            price: { type: "number", exclusiveMinimum: 0, maximum: 1_000_000 },
+            price: { type: "number", exclusiveMinimum: 0, maximum: 1_000_000, description: "Dollars" },
+            stock: { type: "integer", minimum: 0, maximum: 1_000_000_000 },
+          },
+        },
+        PatchProductStockBody: {
+          type: "object",
+          required: ["stock"],
+          properties: {
             stock: { type: "integer", minimum: 0, maximum: 1_000_000_000 },
           },
         },
@@ -225,7 +234,7 @@ export function buildOpenApiSpec(): object {
         },
         patch: {
           tags: ["Products"],
-          summary: "Update product (partial)",
+          summary: "Update product (partial) — name, description, price, and/or stock",
           parameters: [{ $ref: "#/components/parameters/IdPath" }],
           requestBody: {
             required: true,
@@ -252,6 +261,30 @@ export function buildOpenApiSpec(): object {
             "204": { description: "Deleted" },
             "404": { description: "Not found", content: { "application/json": { schema: { $ref: "#/components/schemas/ApiError" } } } },
             "409": { description: "Conflict (e.g. referenced by order lines)", content: { "application/json": { schema: { $ref: "#/components/schemas/ApiError" } } } },
+            "422": { description: "Validation error", content: { "application/json": { schema: { $ref: "#/components/schemas/ApiError" } } } },
+          },
+        },
+      },
+      [productStockPath]: {
+        patch: {
+          tags: ["Products"],
+          summary: "Update product stock only",
+          description: "Same effect as PATCH on the product with body `{ \"stock\": n }`. Use for inventory adjustments without catalog fields.",
+          parameters: [{ $ref: "#/components/parameters/IdPath" }],
+          requestBody: {
+            required: true,
+            content: { "application/json": { schema: { $ref: "#/components/schemas/PatchProductStockBody" } } },
+          },
+          responses: {
+            "200": {
+              description: "Updated",
+              content: {
+                "application/json": {
+                  schema: { type: "object", properties: { data: { $ref: "#/components/schemas/Product" } } },
+                },
+              },
+            },
+            "404": { description: "Not found", content: { "application/json": { schema: { $ref: "#/components/schemas/ApiError" } } } },
             "422": { description: "Validation error", content: { "application/json": { schema: { $ref: "#/components/schemas/ApiError" } } } },
           },
         },

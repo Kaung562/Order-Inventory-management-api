@@ -250,7 +250,43 @@
             "description": "Generated from cURL: curl -sS -X POST \"http://localhost:3000/api/orders/1/cancel\""
           },
           "response": []
-        }
+        },
+         {
+      "name": "http://localhost:3000/api/products/1",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\": \"Updated name\",\n    \"description\": \"Updated description\",\n    \"price\": 29.99,\n    \"stock\": 100\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/products/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        },
+        "description": "Generated from cURL: curl -sS -X PATCH \"http://localhost:3000/api/products/1\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"Updated name\",\n    \"description\": \"Updated description\",\n    \"price\": 29.99,\n    \"stock\": 100\n  }'"
+      },
+      "response": []
+    }
       ]
     }
   ]

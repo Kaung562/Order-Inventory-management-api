@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import type { z } from "zod";
 import type { OrderService } from "../services/orderService";
 import { errorResponse } from "../services/commonService";
+import { Pagination } from "../libs/pagination";
 import { orderToResponse } from "../libs/responseMappers";
 import { paginationQuerySchema } from "../schemas/paginationSchemas";
 import { createOrderBodySchema, orderIdParamSchema } from "../schemas/orderSchemas";
@@ -16,15 +17,7 @@ export function createOrderController(service: OrderService) {
       try {
         const { page, pageSize } = res.locals.validated!.query as PaginationQuery;
         const result = await service.list(page, pageSize);
-        res.json({
-          data: result.items.map(orderToResponse),
-          page: {
-            total: result.total,
-            page: result.page,
-            pageSize: result.pageSize,
-            totalPages: Math.ceil(result.total / result.pageSize) || 0,
-          },
-        });
+        res.json(Pagination.toResponse(result, orderToResponse));
       } catch (e) {
         errorResponse(e, res, next);
       }

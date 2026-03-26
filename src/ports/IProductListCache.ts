@@ -1,5 +1,5 @@
 import type { Product } from "../entities/Product";
-import type { PaginatedResult } from "./IProductRepository";
+import type { PaginatedResult } from "../libs/pagination";
 
 export interface IProductListCache {
   get(page: number, pageSize: number): Promise<PaginatedResult<Product> | null>;

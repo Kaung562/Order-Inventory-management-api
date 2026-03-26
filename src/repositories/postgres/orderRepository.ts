@@ -1,5 +1,7 @@
 import type { DataSource } from "typeorm";
 import type { Order, OrderItem, OrderLineInput } from "../../entities/Order";
+import type { PaginatedResult, PaginationParams } from "../../libs/pagination";
+import { Pagination } from "../../libs/pagination";
 import type { IOrderRepository } from "../../ports/IOrderRepository";
 import { ConflictError, NotFoundError, ValidationAppError } from "../../errorHandlers/responseError";
 import { ProductOrmEntity } from "../../orm/entities/Product.orm.entity";
@@ -43,13 +45,8 @@ export class PostgresOrderRepository implements IOrderRepository {
     return mapOrder(o, o.items ?? []);
   }
 
-  async list(params: { page: number; pageSize: number }): Promise<{
-    items: Order[];
-    total: number;
-    page: number;
-    pageSize: number;
-  }> {
-    const offset = (params.page - 1) * params.pageSize;
+  async list(params: PaginationParams): Promise<PaginatedResult<Order>> {
+    const offset = Pagination.offset(params);
     const total = await this.orderRepo.count();
     const rows = await this.orderRepo.find({
       relations: ["items"],

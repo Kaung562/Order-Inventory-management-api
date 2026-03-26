@@ -1,6 +1,7 @@
 import type { DataSource } from "typeorm";
 import type { Product, ProductCreateInput, ProductUpdateInput } from "../../entities/Product";
-import type { IProductRepository, PaginatedResult } from "../../ports/IProductRepository";
+import { Pagination, type PaginatedResult, type PaginationParams } from "../../libs/pagination";
+import type { IProductRepository } from "../../ports/IProductRepository";
 import { ProductOrmEntity } from "../../orm/entities/Product.orm.entity";
 
 function mapProduct(e: ProductOrmEntity): Product {
@@ -56,8 +57,8 @@ export class PostgresProductRepository implements IProductRepository {
     return (res.affected ?? 0) > 0;
   }
 
-  async list(params: { page: number; pageSize: number }): Promise<PaginatedResult<Product>> {
-    const offset = (params.page - 1) * params.pageSize;
+  async list(params: PaginationParams): Promise<PaginatedResult<Product>> {
+    const offset = Pagination.offset(params);
     const [rows, total] = await this.repo.findAndCount({
       order: { createdAt: "DESC" },
       skip: offset,

@@ -4,9 +4,11 @@ import type { ProductService } from "../services/productService";
 import { errorResponse } from "../services/commonService";
 import { productToResponse } from "../libs/responseMappers";
 import { dollarsToCents } from "../libs/money";
+import { Pagination } from "../libs/pagination";
 import { paginationQuerySchema } from "../schemas/paginationSchemas";
 import {
   createProductBodySchema,
+  patchProductStockBodySchema,
   productIdParamSchema,
   updateProductBodySchema,
 } from "../schemas/productSchemas";
@@ -14,6 +16,7 @@ import {
 type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 type CreateBody = z.infer<typeof createProductBodySchema>;
 type UpdateBody = z.infer<typeof updateProductBodySchema>;
+type PatchStockBody = z.infer<typeof patchProductStockBodySchema>;
 type IdParams = z.infer<typeof productIdParamSchema>;
 
 export function createProductController(service: ProductService) {
@@ -22,15 +25,7 @@ export function createProductController(service: ProductService) {
       try {
         const { page, pageSize } = res.locals.validated!.query as PaginationQuery;
         const result = await service.list(page, pageSize);
-        res.json({
-          data: result.items.map(productToResponse),
-          page: {
-            total: result.total,
-            page: result.page,
-            pageSize: result.pageSize,
-            totalPages: Math.ceil(result.total / result.pageSize) || 0,
-          },
-        });
+        res.json(Pagination.toResponse(result, productToResponse));
       } catch (e) {
         errorResponse(e, res, next);
       }
@@ -71,6 +66,18 @@ export function createProductController(service: ProductService) {
           priceCents: body.price !== undefined ? dollarsToCents(body.price) : undefined,
           stock: body.stock,
         });
+        res.json({ data: productToResponse(p) });
+      } catch (e) {
+        errorResponse(e, res, next);
+      }
+    },
+
+    /** Update stock only — same semantics as PATCH /:id with body `{ "stock": n }`. */
+    patchStock: async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        const { id } = res.locals.validated!.params as IdParams;
+        const body = res.locals.validated!.body as PatchStockBody;
+        const p = await service.update(id, { stock: body.stock });
         res.json({ data: productToResponse(p) });
       } catch (e) {
         errorResponse(e, res, next);

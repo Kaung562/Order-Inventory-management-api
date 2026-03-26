@@ -1,4 +1,5 @@
-import type { IProductRepository, PaginatedResult } from "../ports/IProductRepository";
+import type { PaginatedResult } from "../libs/pagination";
+import type { IProductRepository } from "../ports/IProductRepository";
 import type { IProductListCache } from "../ports/IProductListCache";
 import type { Product, ProductCreateInput, ProductUpdateInput } from "../entities/Product";
 import { NotFoundError } from "../errorHandlers/responseError";

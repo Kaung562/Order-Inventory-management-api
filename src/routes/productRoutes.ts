@@ -5,6 +5,7 @@ import { createProductController } from "../controllers/productController";
 import { paginationQuerySchema } from "../schemas/paginationSchemas";
 import {
   createProductBodySchema,
+  patchProductStockBodySchema,
   productIdParamSchema,
   updateProductBodySchema,
 } from "../schemas/productSchemas";
@@ -18,6 +19,12 @@ export function createProductRoutes(service: ProductService): Router {
   router.get("/:id", validateRequest({ params: productIdParamSchema }), c.getById);
 
   router.post("/", validateRequest({ body: createProductBodySchema }), c.create);
+
+  router.patch(
+    "/:id/stock",
+    validateRequest({ params: productIdParamSchema, body: patchProductStockBodySchema }),
+    c.patchStock
+  );
 
   router.patch(
     "/:id",

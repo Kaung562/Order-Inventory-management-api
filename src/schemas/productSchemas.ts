@@ -12,6 +12,7 @@ export const createProductBodySchema = z.object({
     .max(1_000_000_000),
 });
 
+
 export const updateProductBodySchema = z
   .object({
     name: z.string().min(1, { message: productErrorMsg.NAME_REQUIRED }).max(255).optional(),
@@ -24,7 +25,22 @@ export const updateProductBodySchema = z
       .max(1_000_000_000)
       .optional(),
   })
-  .refine((data) => Object.keys(data).length > 0, { message: productErrorMsg.UPDATE_EMPTY });
+  .refine(
+    (data) =>
+      data.name !== undefined ||
+      data.description !== undefined ||
+      data.price !== undefined ||
+      data.stock !== undefined,
+    { message: productErrorMsg.UPDATE_EMPTY }
+  );
+
+export const patchProductStockBodySchema = z.object({
+  stock: z
+    .number()
+    .int()
+    .min(0, { message: productErrorMsg.STOCK_NON_NEGATIVE })
+    .max(1_000_000_000),
+});
 
 export const productIdParamSchema = z.object({
   id: z.coerce.number().int().positive(),
