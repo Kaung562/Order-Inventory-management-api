@@ -1,0 +1,46 @@
+{
+  "name": "order-management-inventory-api",
+  "version": "1.0.0",
+  "description": "Order Management & Inventory REST API (Node.js, TypeScript, PostgreSQL)",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "orders",
+    "inventory",
+    "postgresql",
+    "typescript"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "^0.3.20",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.20.0",
+    "@types/swagger-ui-express": "^4.1.7",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

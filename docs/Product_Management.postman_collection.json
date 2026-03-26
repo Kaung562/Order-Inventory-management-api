@@ -1,0 +1,257 @@
+{
+  "info": {
+    "_postman_id": "9bdb9c4a-6114-40fe-87ad-ec9c8a3afdcf",
+    "name": "Product_Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40427485"
+  },
+  "item": [
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Demo product\",\n    \"description\": \"Optional text\",\n    \"price\": 19.99,\n    \"stock\": 100\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products"
+              ]
+            },
+            "description": "Generated from cURL: curl -s -X POST http://localhost:3000/api/products \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"Demo product\",\n    \"description\": \"Optional text\",\n    \"price\": 19.99,\n    \"stock\": 100\n  }'"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/products",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/products/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"stock\":50}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/products/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "products",
+                "1"
+              ]
+            },
+            "description": "Generated from cURL: curl -sS -X PATCH \"http://localhost:3000/api/products/1\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"stock\":50}'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/orders/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders",
+                "1"
+              ]
+            },
+            "description": "Generated from cURL: curl -sS \"http://localhost:3000/api/orders/1\""
+          },
+          "response": []
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/orders?page=1&pageSize=20",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Generated from cURL: curl -sS \"http://localhost:3000/api/orders?page=1&pageSize=20\""
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"items\":[{\"productId\":1,\"quantity\":2}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/orders",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders"
+              ]
+            },
+            "description": "Generated from cURL: curl -sS -X POST \"http://localhost:3000/api/orders\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"items\":[{\"productId\":1,\"quantity\":2}]}'"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/orders/1/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "orders",
+                "1",
+                "cancel"
+              ]
+            },
+            "description": "Generated from cURL: curl -sS -X POST \"http://localhost:3000/api/orders/1/cancel\""
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
