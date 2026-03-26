@@ -2,7 +2,7 @@
 
 REST API for **products** (with stock), **orders** (with line items), **stock deduction** when an order is placed, and **stock restoration** when an order is cancelled. Built with **Node.js**, **TypeScript**, **Express**, **PostgreSQL**, and **TypeORM** (transactions for order flows).
 
-**Scope:** backend-only—no separate admin UI. **Swagger UI** at `/api-docs` is for documentation and trying requests (not a product dashboard). Use Swagger, Postman (`docs/postman_collection.json`), or any HTTP client.
+**Scope:** backend-only—no separate admin UI. **Swagger UI** at `/api-docs` is for documentation and trying requests (not a product dashboard). Use Swagger, Postman, or any HTTP client. The **Postman collection** for this project is in the **`docs/`** folder: `docs/postman_collection.json`.
 
 Layering is similar to a typical **controller → service → repository** layout, with **Zod** validation at the HTTP edge and **domain types** in `entities/` separate from **TypeORM** mappings in `orm/entities/`.
 
@@ -119,47 +119,8 @@ Default prefix **`/api`** (`API_PREFIX=api`). If `API_PREFIX` is empty, routes a
 
 ## Docs
 
+- **Postman:** collection file **`docs/postman_collection.json`** (under the **`docs/`** folder). Import it in Postman and set the `baseUrl` variable.
 - **Swagger UI:** `http://localhost:3000/api-docs` — paths match `API_PREFIX` / `config/apiPrefix.ts`.
-- **Postman:** `docs/postman_collection.json` — set `baseUrl`.
-
-## Project layout
-
-```
-orderManagementAndInventory/
-├── docker-compose.yml
-├── Dockerfile
-├── .env.example
-├── docs/
-│   └── postman_collection.json
-├── migrations/
-│   └── README.md              # Notes on TypeORM sync (no SQL migrations in repo)
-├── test/                      # Jest tests (mirror src: test/libs, test/services, …)
-├── tsconfig.jest.json         # Used by ts-jest for tests outside src/
-└── src/
-    ├── app.ts                 # Express: middleware, routes, Swagger UI, error handlers
-    ├── server.ts              # Entry: DataSource init, listen, shutdown
-    ├── config/
-    │   ├── apiPrefix.ts       # REST prefix → mount paths
-    │   ├── data-source.ts     # TypeORM DataSource
-    │   ├── env.ts             # dotenv / env
-    │   └── swagger.ts         # OpenAPI 3 spec (used by /api-docs)
-    ├── constants/             # Zod / domain error message strings
-    ├── controllers/           # HTTP: validated input → services → JSON
-    ├── entities/              # Domain models (Product, Order)
-    ├── errorHandlers/         # ResponseError, Zod → API body
-    ├── libs/                  # Money helpers, JSON mappers
-    ├── middlewares/           # validateRequest, errorHandler, pgError
-    ├── orm/entities/          # TypeORM entity classes
-    ├── ports/                 # Repository & cache interfaces (IProductRepository, etc.)
-    ├── repositories/
-    │   ├── postgres/          # TypeORM repositories
-    │   └── redis/             # Optional product list cache
-    ├── routes/                # Express routers → controllers
-    ├── schemas/               # Zod schemas
-    ├── services/              # Business logic
-    └── types/
-        └── express.d.ts       # res.locals.validated
-```
 
 ### Request flow
 
@@ -167,17 +128,4 @@ orderManagementAndInventory/
 2. Route: `validateRequest` → controller → service → repository (TypeORM / Redis).
 3. After routes: 404 JSON → `pgErrorMiddleware` → `errorHandler`.
 
-## Git
 
-Initialize git **inside this project folder** (not your home directory):
-
-```bash
-cd /path/to/orderManagementAndInventory
-git init
-git add .
-git commit -m "Add order management and inventory API"
-```
-
-## License
-
-MIT
