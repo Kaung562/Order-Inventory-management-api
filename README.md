@@ -4,7 +4,7 @@ REST API for **products** (with stock), **orders** (with line items), **stock de
 
 **Scope:** backend-only—no separate admin UI. **Swagger UI** at `/api-docs` is for documentation and trying requests (not a product dashboard). Use Swagger, Postman, or any HTTP client. The **Postman collection** for this project is in the **`docs/`** folder: `docs/postman_collection.json`.
 
-Layering is similar to a typical **controller → service → repository** layout, with **Zod** validation at the HTTP edge and **domain types** in `entities/` separate from **TypeORM** mappings in `orm/entities/`.
+Layering is **controller → service → repository**, with **Zod** validation at the HTTP edge, **TypeORM** entities in **`entities/`**, and **domain types plus repository interfaces** in **`interfaces/`** (Postgres and Redis implementations under **`repositories/`**).
 
 ## Features
 
@@ -17,7 +17,7 @@ Layering is similar to a typical **controller → service → repository** layou
 | Validation & errors | **Zod** + `validateRequest` → **422**; domain errors → `ResponseError`; FK issues → **409** |
 | Pagination | `?page=&pageSize=` (max 100); list responses use **`page`** (totals, `page`, `pageSize`, `totalPages`) |
 | Redis (optional) | Product list cache (short TTL); cleared on product writes **and** when orders place/cancel (stock changes). Omit `REDIS_URL` to disable |
-| Schema | **TypeORM `synchronize`** from `src/orm/entities/` — on by default; disable with `DATABASE_SYNC=false` or `0` (see `src/config/data-source.ts`, `.env.example`) |
+| Schema | **TypeORM `synchronize`** from `src/entities/` — on by default; disable with `DATABASE_SYNC=false` or `0` (see `src/config/data-source.ts`, `.env.example`) |
 | Docker | `docker compose up --build` — config via `.env` (see below) |
 | API docs | OpenAPI built in `config/swagger.ts` (paths follow `apiPrefix.ts`); **Swagger UI** at `/api-docs` |
 
@@ -114,8 +114,10 @@ Default prefix **`/api`** (`API_PREFIX=api`). If `API_PREFIX` is empty, routes a
 
 ## Database
 
-- **Entities:** `src/orm/entities/` (TypeORM). **Domain types:** `src/entities/` (`Product`, `Order`).
-- **Synchronize:** TypeORM applies DDL from `src/orm/entities/` on startup when **synchronize** is enabled. That is the default; set **`DATABASE_SYNC=false`** or **`DATABASE_SYNC=0`** in `.env` to turn it off (see **`src/config/data-source.ts`**). This repo does not ship separate SQL migration files—use your own migration process if you disable synchronize in production.
+- **Entities (TypeORM):** `src/entities/` — table mappings (`ProductOrmEntity` in `Product.ts`; `OrderOrmEntity` / `OrderItemOrmEntity` in `Order.ts`).
+- **Interfaces:** `src/interfaces/` — plain types (`productInterface.ts`, `orderInterface.ts`) and repository/cache contracts (`IProductRepository.ts`, `IOrderRepository.ts`, `IProductListCache.ts`).
+- **Repositories:** `src/repositories/postgres/` and `src/repositories/redis/` — adapters that implement those interfaces.
+- **Synchronize:** TypeORM applies DDL from `src/entities/` on startup when **synchronize** is enabled. That is the default; set **`DATABASE_SYNC=false`** or **`DATABASE_SYNC=0`** in `.env` to turn it off (see **`src/config/data-source.ts`**). This repo does not ship separate SQL migration files—use your own migration process if you disable synchronize in production.
 - **Money:** stored as integer cents (`price_cents`, `total_cents`, `unit_price_cents`); JSON also exposes `price` / `total` / `unitPrice` in dollars.
 
 ## Docs

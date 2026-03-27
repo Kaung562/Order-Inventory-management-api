@@ -1,5 +1,5 @@
-import type { Product } from "../entities/Product";
-import type { Order } from "../entities/Order";
+import type { Product } from "../interfaces/productInterface";
+import type { Order } from "../interfaces/orderInterface";
 
 export function productToResponse(p: Product) {
   return {

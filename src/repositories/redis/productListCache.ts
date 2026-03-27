@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 import type { PaginatedResult } from "../../libs/pagination";
-import type { IProductListCache } from "../../ports/IProductListCache";
-import type { Product } from "../../entities/Product";
+import type { IProductListCache } from "../../interfaces/IProductListCache";
+import type { Product } from "../../interfaces/productInterface";
 
 const PREFIX = "products:list:";
 const DEFAULT_TTL_SEC = 60;

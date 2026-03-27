@@ -1,7 +1,7 @@
 import type { PaginatedResult } from "../libs/pagination";
-import type { IProductRepository } from "../ports/IProductRepository";
-import type { IProductListCache } from "../ports/IProductListCache";
-import type { Product, ProductCreateInput, ProductUpdateInput } from "../entities/Product";
+import type { IProductRepository } from "../interfaces/IProductRepository";
+import type { IProductListCache } from "../interfaces/IProductListCache";
+import type { Product, ProductCreateInput, ProductUpdateInput } from "../interfaces/productInterface";
 import { NotFoundError } from "../errorHandlers/responseError";
 
 export class ProductService {

@@ -3,7 +3,6 @@ import { ZodError } from "zod";
 import { ResponseError } from "../errorHandlers/responseError";
 import { zodToErrorResponseBody } from "../errorHandlers/responseZodError";
 
-/** Map thrown errors to HTTP responses (mirrors video-management-ms controller `errorResponse`). */
 export function errorResponse(err: unknown, res: Response, next: NextFunction): void {
   if (err instanceof ResponseError) {
     res.status(err.statusCode).json({

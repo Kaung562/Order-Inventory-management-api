@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { assertDatabaseUrl, env } from "./env";
-import { ProductOrmEntity } from "../orm/entities/Product.orm.entity";
-import { OrderOrmEntity, OrderItemOrmEntity } from "../orm/entities/order.entities";
+import { ProductOrmEntity } from "../entities/Product";
+import { OrderOrmEntity, OrderItemOrmEntity } from "../entities/Order";
 
 function shouldSynchronize(): boolean {
   const v = process.env.DATABASE_SYNC;
