@@ -17,7 +17,7 @@ Layering is similar to a typical **controller → service → repository** layou
 | Validation & errors | **Zod** + `validateRequest` → **422**; domain errors → `ResponseError`; FK issues → **409** |
 | Pagination | `?page=&pageSize=` (max 100); list responses use **`page`** (totals, `page`, `pageSize`, `totalPages`) |
 | Redis (optional) | Product list cache (short TTL); cleared on product writes **and** when orders place/cancel (stock changes). Omit `REDIS_URL` to disable |
-| Schema | **TypeORM `synchronize`** from `orm/entities/` when `DATABASE_SYNC=true` (see `migrations/README.md`) |
+| Schema | **TypeORM `synchronize`** from `src/orm/entities/` — on by default; disable with `DATABASE_SYNC=false` or `0` (see `src/config/data-source.ts`, `.env.example`) |
 | Docker | `docker compose up --build` — config via `.env` (see below) |
 | API docs | OpenAPI built in `config/swagger.ts` (paths follow `apiPrefix.ts`); **Swagger UI** at `/api-docs` |
 
@@ -42,7 +42,7 @@ Layering is similar to a typical **controller → service → repository** layou
    - Swagger: `http://localhost:3000/api-docs`
    - Products: `http://localhost:3000/api/products`
 
-On first start, tables are created/updated by TypeORM when `DATABASE_SYNC=true`.
+On startup, tables are created or updated from the entity definitions when **synchronize** is enabled (default unless `DATABASE_SYNC` is `false` or `0`).
 
 ## Docker
 
@@ -115,7 +115,7 @@ Default prefix **`/api`** (`API_PREFIX=api`). If `API_PREFIX` is empty, routes a
 ## Database
 
 - **Entities:** `src/orm/entities/` (TypeORM). **Domain types:** `src/entities/` (`Product`, `Order`).
-- **Synchronize:** `DATABASE_SYNC=true` applies DDL on startup (`migrations/README.md`).
+- **Synchronize:** TypeORM applies DDL from `src/orm/entities/` on startup when **synchronize** is enabled. That is the default; set **`DATABASE_SYNC=false`** or **`DATABASE_SYNC=0`** in `.env` to turn it off (see **`src/config/data-source.ts`**). This repo does not ship separate SQL migration files—use your own migration process if you disable synchronize in production.
 - **Money:** stored as integer cents (`price_cents`, `total_cents`, `unit_price_cents`); JSON also exposes `price` / `total` / `unitPrice` in dollars.
 
 ## Docs
