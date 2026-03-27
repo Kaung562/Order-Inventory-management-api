@@ -1,12 +1,11 @@
-import type { IOrderRepository } from "../ports/IOrderRepository";
-import type { IProductListCache } from "../ports/IProductListCache";
-import type { Order, OrderLineInput } from "../entities/Order";
+import type { IOrderRepository } from "../interfaces/IOrderRepository";
+import type { IProductListCache } from "../interfaces/IProductListCache";
+import type { Order, OrderLineInput } from "../interfaces/orderInterface";
 import { NotFoundError } from "../errorHandlers/responseError";
 
 export class OrderService {
   constructor(
     private readonly repo: IOrderRepository,
-    /** Cleared after order create/cancel so product list cache cannot show stale stock. */
     private readonly productListCache: IProductListCache | null = null
   ) {}
 

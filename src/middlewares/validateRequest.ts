@@ -9,10 +9,6 @@ export type ValidateSchemas = {
   params?: z.ZodType<unknown>;
 };
 
-/**
- * Validates query / params / body with Zod and stores results on `res.locals.validated`.
- * On failure responds with **422** and an error list (video-management-ms ExtendedZodError style).
- */
 export function validateRequest(schemas: ValidateSchemas): RequestHandler {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {

@@ -1,4 +1,4 @@
-/** HTTP-facing errors (similar to video-management-ms `ResponseError` with numeric status). */
+
 export class ResponseError extends Error {
   constructor(
     public readonly statusCode: number,

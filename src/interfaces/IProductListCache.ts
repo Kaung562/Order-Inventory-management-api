@@ -1,4 +1,4 @@
-import type { Product } from "../entities/Product";
+import type { Product } from "./productInterface";
 import type { PaginatedResult } from "../libs/pagination";
 
 export interface IProductListCache {

@@ -1,23 +1,26 @@
-export type Product = {
-  id: number;
-  name: string;
-  description: string | null;
-  priceCents: number;
-  stock: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export type ProductCreateInput = {
-  name: string;
-  description?: string | null;
-  priceCents: number;
-  stock: number;
-};
+@Entity({ name: "products" })
+@Index("idx_products_created_at", ["createdAt"])
+export class ProductOrmEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-export type ProductUpdateInput = {
-  name?: string;
-  description?: string | null;
-  priceCents?: number;
-  stock?: number;
-};
+  @Column({ type: "varchar", length: 255 })
+  name!: string;
+
+  @Column({ type: "text", nullable: true })
+  description!: string | null;
+
+  @Column({ name: "price_cents", type: "bigint" })
+  priceCents!: string;
+
+  @Column({ type: "int" })
+  stock!: number;
+
+  @CreateDateColumn({ name: "created_at", type: "timestamptz" })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ name: "updated_at", type: "timestamptz" })
+  updatedAt!: Date;
+}

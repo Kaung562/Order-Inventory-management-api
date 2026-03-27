@@ -1,8 +1,8 @@
 import type { DataSource } from "typeorm";
-import type { Product, ProductCreateInput, ProductUpdateInput } from "../../entities/Product";
+import type { Product, ProductCreateInput, ProductUpdateInput } from "../../interfaces/productInterface";
 import { Pagination, type PaginatedResult, type PaginationParams } from "../../libs/pagination";
-import type { IProductRepository } from "../../ports/IProductRepository";
-import { ProductOrmEntity } from "../../orm/entities/Product.orm.entity";
+import type { IProductRepository } from "../../interfaces/IProductRepository";
+import { ProductOrmEntity } from "../../entities/Product";
 
 function mapProduct(e: ProductOrmEntity): Product {
   return {

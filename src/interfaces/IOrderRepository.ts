@@ -1,4 +1,4 @@
-import type { Order, OrderLineInput } from "../entities/Order";
+import type { Order, OrderLineInput } from "./orderInterface";
 import type { PaginatedResult, PaginationParams } from "../libs/pagination";
 
 export interface IOrderRepository {

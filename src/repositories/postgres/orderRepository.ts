@@ -1,11 +1,11 @@
 import type { DataSource } from "typeorm";
-import type { Order, OrderItem, OrderLineInput } from "../../entities/Order";
+import type { Order, OrderItem, OrderLineInput } from "../../interfaces/orderInterface";
 import type { PaginatedResult, PaginationParams } from "../../libs/pagination";
 import { Pagination } from "../../libs/pagination";
-import type { IOrderRepository } from "../../ports/IOrderRepository";
+import type { IOrderRepository } from "../../interfaces/IOrderRepository";
 import { ConflictError, NotFoundError, ValidationAppError } from "../../errorHandlers/responseError";
-import { ProductOrmEntity } from "../../orm/entities/Product.orm.entity";
-import { OrderOrmEntity, OrderItemOrmEntity } from "../../orm/entities/order.entities";
+import { ProductOrmEntity } from "../../entities/Product";
+import { OrderOrmEntity, OrderItemOrmEntity } from "../../entities/Order";
 
 function mapItem(e: OrderItemOrmEntity): OrderItem {
   return {

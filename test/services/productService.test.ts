@@ -1,7 +1,7 @@
 import { ProductService } from "../../src/services/productService";
-import type { IProductRepository } from "../../src/ports/IProductRepository";
-import type { IProductListCache } from "../../src/ports/IProductListCache";
-import type { Product } from "../../src/entities/Product";
+import type { IProductRepository } from "../../src/interfaces/IProductRepository";
+import type { IProductListCache } from "../../src/interfaces/IProductListCache";
+import type { Product } from "../../src/interfaces/productInterface";
 
 const baseProduct = (over: Partial<Product> = {}): Product => ({
   id: 1,

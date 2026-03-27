@@ -1,4 +1,4 @@
-import type { Product, ProductCreateInput, ProductUpdateInput } from "../entities/Product";
+import type { Product, ProductCreateInput, ProductUpdateInput } from "./productInterface";
 import type { PaginatedResult, PaginationParams } from "../libs/pagination";
 
 export interface IProductRepository {
