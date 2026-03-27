@@ -2,7 +2,9 @@
 
 REST API for **products** (with stock), **orders** (with line items), **stock deduction** when an order is placed, and **stock restoration** when an order is cancelled. Built with **Node.js**, **TypeScript**, **Express**, **PostgreSQL**, and **TypeORM** (transactions for order flows).
 
-**Scope:** backend-only—no separate admin UI. **Swagger UI** at `/api-docs` is for documentation and trying requests (not a product dashboard). Use Swagger, Postman, or any HTTP client. The **Postman collection** for this project is in the **`docs/`** folder: `docs/postman_collection.json`.
+**Scope:** backend-only.
+
+**Swagger UI** at `/api-docs` is for documentation and trying requests. Use Swagger, Postman, or any HTTP client. The **Postman collection** for this project is in the **`docs/`** folder: `docs/postman_collection.json`.
 
 Layering is **controller → service → repository**, with **Zod** validation at the HTTP edge, **TypeORM** entities in **`entities/`**, and **domain types plus repository interfaces** in **`interfaces/`** (Postgres and Redis implementations under **`repositories/`**).
 
