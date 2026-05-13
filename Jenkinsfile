@@ -28,7 +28,7 @@ DATABASE_SYNC=true
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=root
 POSTGRES_DB=orders_inventory
-POSTGRES_PORT=5432
+POSTGRES_PORT=5444
 REDIS_PORT=6379
 
 DATABASE_URL_DOCKER=postgresql://postgres:root@postgres:5432/orders_inventory
