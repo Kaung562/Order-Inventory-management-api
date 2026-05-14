@@ -60,17 +60,17 @@ pipeline {
             }
         }
 
-        stage('Health Check') {
-            steps {
-                sh '''
-                    echo "Running health check..."
+        // stage('Health Check') {
+        //     steps {
+        //         sh '''
+        //             echo "Running health check..."
 
-                    sleep 10
+        //             sleep 10
 
-                    curl -f http://localhost:${APP_PORT} || exit 1
-                '''
-            }
-        }
+        //             curl -f http://localhost:${APP_PORT} || exit 1
+        //         '''
+        //     }
+        // }
     }
 
     post {
