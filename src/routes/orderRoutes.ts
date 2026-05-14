@@ -17,7 +17,7 @@ export function createOrderRoutes(service: OrderService): Router {
 
   router.post("/", validateRequest({ body: createOrderBodySchema }), c.create);
 
-  // just for testing purposes, not a real endpoint
+  // just webhoook testing
 
   return router;
 }
