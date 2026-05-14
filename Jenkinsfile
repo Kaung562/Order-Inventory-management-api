@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'develop',
-                credentialsId: 'jenkin-test',
+                credentialsId: 'cwk-test',
                 url: 'https://github.com/Kaung562/Order-Inventory-management-api'
             }
         }
@@ -18,7 +18,7 @@ pipeline {
         stage('Create .env') {
             steps {
                 sh '''
-                    cat > .env <<EOF
+cat > .env <<EOF
 PORT=3000
 NODE_ENV=development
 API_PREFIX=api
@@ -29,12 +29,12 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=root
 POSTGRES_DB=orders_inventory
 POSTGRES_PORT=5444
-REDIS_PORT=6379
+REDIS_PORT=6380
 
 DATABASE_URL_DOCKER=postgresql://postgres:root@postgres:5432/orders_inventory
 REDIS_URL_DOCKER=redis://redis:6379
 EOF
-                '''
+'''
             }
         }
 
@@ -73,7 +73,7 @@ EOF
         }
 
         success {
-            echo "Deployment SUCCESS (Docker Compose, no Docker Hub)"
+            echo "Deployment SUCCESS (Docker Compose v2)"
         }
 
         failure {
