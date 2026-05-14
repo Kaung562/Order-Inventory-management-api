@@ -3,90 +3,77 @@ pipeline {
 
     environment {
         COMPOSE_PROJECT_NAME = "order-inventory"
-
-        // Application Config
-        APP_PORT = "3000"
-        NODE_ENV = "production"
-        API_PREFIX = "api"
-
-        // Database Config
-        DATABASE_SYNC = "false"
-        POSTGRES_USER = "postgres"
-        POSTGRES_PASSWORD = "root" // later -> "${PASSWORD}"
-        POSTGRES_DB = "orders_inventory"
-
-        // Ports
-        POSTGRES_PORT = "5444"
-        REDIS_PORT = "6380"
     }
 
     stages {
 
-        stage('Checkout SCM') {
+        stage('Checkout') {
             steps {
                 git branch: 'develop',
-                    credentialsId: 'cwk-test',
-                    url: 'https://github.com/Kaung562/Order-Inventory-management-api'
+                credentialsId: 'jenkin-test',
+                url: 'https://github.com/Kaung562/Order-Inventory-management-api'
             }
         }
 
-        stage('Stop Existing Containers') {
+        stage('Create .env') {
             steps {
                 sh '''
-                    echo "Stopping existing containers..."
-                    docker compose down --remove-orphans || true
+                    cat > .env <<EOF
+PORT=3000
+NODE_ENV=development
+API_PREFIX=api
+
+DATABASE_SYNC=true
+
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=root
+POSTGRES_DB=orders_inventory
+POSTGRES_PORT=5444
+REDIS_PORT=6379
+
+DATABASE_URL_DOCKER=postgresql://postgres:root@postgres:5432/orders_inventory
+REDIS_URL_DOCKER=redis://redis:6379
+EOF
                 '''
             }
         }
 
-        stage('Build & Deploy') {
+        stage('Deploy (Docker Compose)') {
             steps {
                 sh '''
-                    echo "Building and deploying application..."
+                    echo "Stopping old containers..."
+                    docker compose down || true
 
-                    PORT=${APP_PORT} \
-                    NODE_ENV=${NODE_ENV} \
-                    API_PREFIX=${API_PREFIX} \
-                    DATABASE_SYNC=${DATABASE_SYNC} \
-                    POSTGRES_USER=${POSTGRES_USER} \
-                    POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
-                    POSTGRES_DB=${POSTGRES_DB} \
-                    POSTGRES_PORT=${POSTGRES_PORT} \
-                    REDIS_PORT=${REDIS_PORT} \
-                    DATABASE_URL_DOCKER=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/orders_inventory \
-                    REDIS_URL_DOCKER=redis://redis:6379 \
+                    echo "Building and starting services..."
                     docker compose up -d --build
+
+                    echo "Waiting for services..."
+                    sleep 10
                 '''
             }
         }
 
-        // stage('Health Check') {
-        //     steps {
-        //         sh '''
-        //             echo "Running health check..."
+        stage('Test') {
+            steps {
+                sh '''
+                    echo "Testing API..."
+                    curl -s http://localhost:3000 || true
+                '''
+            }
+        }
 
-        //             sleep 10
-
-        //             curl -f http://localhost:${APP_PORT} || exit 1
-        //         '''
-        //     }
-        // }
     }
 
     post {
-
         always {
             sh '''
-                echo "========== CONTAINER STATUS =========="
+                echo "Container status:"
                 docker compose ps || true
-
-                echo "========== LAST 50 LOGS =========="
-                docker compose logs --tail=50 || true
             '''
         }
 
         success {
-            echo "Deployment SUCCESS"
+            echo "Deployment SUCCESS (Docker Compose, no Docker Hub)"
         }
 
         failure {
