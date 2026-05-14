@@ -17,7 +17,7 @@ export function createOrderRoutes(service: OrderService): Router {
 
   router.post("/", validateRequest({ body: createOrderBodySchema }), c.create);
 
-  // Just added this comment to trigger a change for testing Jenkins integration. Please ignore.
+  // just for testing purposes, not a real endpoint
 
   return router;
 }
