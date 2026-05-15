@@ -30,6 +30,21 @@ pipeline {
             }
         }
 
+        stage('Validate') {
+            steps {
+                sh '''
+                    echo "Installing dependencies..."
+                    npm install
+
+                    echo "Running tests..."
+                    npm test
+
+                    echo "Building project..."
+                    npm run build
+                '''
+            }
+        }
+
         stage('Stop Existing Containers') {
             steps {
                 sh '''

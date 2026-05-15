@@ -133,4 +133,34 @@ Default prefix **`/api`** (`API_PREFIX=api`). If `API_PREFIX` is empty, routes a
 2. Route: `validateRequest` → controller → service → repository (TypeORM / Redis).
 3. After routes: 404 JSON → `pgErrorMiddleware` → `errorHandler`.
 
+## Jenkins / CI
+
+This repository includes a `Jenkinsfile` at the project root.
+
+- The pipeline checks out the `develop` branch from SCM.
+- It stops any existing Docker Compose containers.
+- It builds and deploys the application with `docker compose up -d --build`.
+- Jenkins environment variables are defined in the `Jenkinsfile`, including `APP_PORT`, `NODE_ENV`, `API_PREFIX`, `DATABASE_SYNC`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, and `REDIS_PORT`.
+
+## Server & host setup
+
+### On host machine
+
+- Install Node.js and npm for local development.
+- Install Docker and Docker Compose.
+- Copy `.env.example` to `.env` and configure `DATABASE_URL` and optionally `REDIS_URL` for local use.
+- Run `npm install` once before `npm run dev`.
+- Use `docker compose up --build` for full local stack and `docker compose down -v` to clean volumes.
+- Confirm that ports `3000`, `5444`, and `6380` are free if using the local Docker stack.
+
+### On the Jenkins / deployment server
+
+- Install Docker and Docker Compose.
+- Install Jenkins or ensure Jenkins can run shell commands and access Docker.
+- Grant Jenkins permission to run `docker compose` in the workspace.
+- Make sure the server can access the Git repository and use the configured credentials.
+- Ensure the server has ports available for the app and database services.
+- Use the existing `Jenkinsfile` to manage checkout, container shutdown, build, and deploy.
+
+
 
